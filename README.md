@@ -1,40 +1,42 @@
 # 📚 Word Saver Extension
 
-A minimal and clean Chrome Extension to save unfamiliar English words while reading — built with **React**, **TypeScript**, **Vite**, and **Bun**.
+A minimal and privacy-friendly Chrome Extension that helps you **save and translate unknown English words** while reading.
 
-### 🔍 Features
-- ✅ Right-click on selected words to **save** them.
-- 📋 See saved words in a **popup**.
-- 🗑️ Remove individual words or **clear all** with one click.
-- 💾 Saves data in **Chrome local storage** (no backend needed).
+Built with **React**, **TypeScript**, **Vite**, and **Bun** — just for fun (and focus) 🎯
+
+![screenshot](./public/demo.jpg)
 
 ---
 
-### 🚀 Tech Stack
+## 🔍 Features
 
-| Tool        | Use                             |
-|-------------|----------------------------------|
-| React + TS  | Popup UI                        |
-| Vite        | Fast bundling                   |
-| Bun         | Package manager + dev server    |
-| Chrome APIs | `contextMenus`, `storage`       |
-
----
-
-### 🖱️ How it works
-
-1. Select a word in any webpage.
-2. Right-click → `Save this word`.
-3. Open the extension popup to view saved words.
-4. Use 🗑️ to delete individual items or "Clear All".
+- ✅ **Right-click** to save any selected English word
+- 🌍 **Auto-translate** to Turkish via Google Translate API
+- 📋 View your saved words in the extension **popup**
+- 🗑️ Delete single words or **clear all** with one click
+- 💾 All data stored in **Chrome local storage** — no backend
 
 ---
 
-### 🛠️ Installation (Dev)
+## 🚀 Tech Stack
 
-```bash
-bun install
-bun run build
-bunx tsc --outDir dist
+| Tool            | Description                            |
+| --------------- | -------------------------------------- |
+| **React + TS**  | Frontend (Popup UI)                    |
+| **Vite**        | Lightning-fast dev & build tooling     |
+| **Bun**         | Superfast JS runtime + package manager |
+| **Chrome APIs** | `contextMenus`, `storage`, `runtime`   |
+| **Google API**  | Unofficial translation endpoint        |
 
+---
 
+## 🌍 Bonus: Auto Translate ✨
+
+When you save a word, it's **automatically translated** to Turkish using Google Translate’s unofficial endpoint.
+
+```json
+{
+  "word": "example",
+  "translation": "örnek"
+}
+```
