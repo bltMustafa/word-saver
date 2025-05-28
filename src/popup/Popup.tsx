@@ -1,17 +1,32 @@
 import { useEffect, useState } from "react";
 
+interface WordEntry {
+    original: string;
+    translation: string;
+    timestamp: number;
+}
+
 export default function Popup() {
-    const [words, setWords] = useState<string[]>([]);
+    const [words, setWords] = useState<WordEntry[]>([]);
 
     useEffect(() => {
         chrome.storage.local.get({ words: [] }, (result) => {
-            console.log("Loaded words:", result.words); // Debug için
-            setWords(result.words);
+            const processedWords = result.words.map((word: any) => {
+                if (typeof word === 'string') {
+                    return {
+                        original: word,
+                        translation: word,
+                        timestamp: Date.now()
+                    };
+                }
+                return word;
+            });
+            setWords(processedWords);
         });
     }, []);
 
     const deleteWord = (wordToDelete: string) => {
-        const updated = words.filter((w) => w !== wordToDelete);
+        const updated = words.filter((w) => w.original !== wordToDelete);
         chrome.storage.local.set({ words: updated }, () => {
             setWords(updated);
         });
@@ -27,7 +42,7 @@ export default function Popup() {
         <div style={{
             padding: "16px",
             fontFamily: "Arial, sans-serif",
-            width: "250px",
+            width: "300px",
             minHeight: "200px"
         }}>
             <h2 style={{
@@ -65,36 +80,55 @@ export default function Popup() {
                         <li
                             key={i}
                             style={{
-                                background: "#f0f0f0",
-                                marginBottom: "6px",
-                                padding: "8px 10px",
-                                borderRadius: "6px",
+                                background: "#f8f9fa",
+                                marginBottom: "8px",
+                                padding: "12px",
+                                borderRadius: "8px",
                                 fontSize: "14px",
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center"
+                                border: "1px solid #e9ecef"
                             }}
                         >
-                            <span style={{ wordBreak: "break-word" }}>
-                                {word}
-                            </span>
-                            <button
-                                onClick={() => deleteWord(word)}
-                                style={{
-                                    background: "#ff4444",
-                                    border: "none",
-                                    color: "white",
-                                    cursor: "pointer",
-                                    fontSize: "12px",
-                                    marginLeft: "8px",
-                                    padding: "4px 8px",
-                                    borderRadius: "3px",
-                                    minWidth: "20px"
-                                }}
-                                title="Delete"
-                            >
-                                ×
-                            </button>
+                            <div style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "flex-start"
+                            }}>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{
+                                        fontWeight: "bold",
+                                        color: "#2c3e50",
+                                        marginBottom: "4px",
+                                        wordBreak: "break-word"
+                                    }}>
+                                        🇺🇸 {word.original}
+                                    </div>
+                                    <div style={{
+                                        color: "#e74c3c",
+                                        fontSize: "13px",
+                                        wordBreak: "break-word"
+                                    }}>
+                                        🇹🇷 {word.translation}
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => deleteWord(word.original)}
+                                    style={{
+                                        background: "#ff4444",
+                                        border: "none",
+                                        color: "white",
+                                        cursor: "pointer",
+                                        fontSize: "12px",
+                                        marginLeft: "8px",
+                                        padding: "4px 8px",
+                                        borderRadius: "3px",
+                                        minWidth: "20px",
+                                        flexShrink: 0
+                                    }}
+                                    title="Delete"
+                                >
+                                    ×
+                                </button>
+                            </div>
                         </li>
                     ))}
                 </ul>
